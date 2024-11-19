@@ -9,6 +9,7 @@ const cors_1 = __importDefault(require("cors"));
 const cron_1 = require("cron");
 const dotenv_1 = __importDefault(require("dotenv"));
 const notificationRouter_1 = require("./Routers/notificationRouter");
+const authRouter_1 = require("./Routers/authRouter");
 const body_parser_1 = __importDefault(require("body-parser"));
 const willRouter_1 = require("./Routers/willRouter");
 const notificationService_1 = require("./Services/notificationService");
@@ -20,6 +21,7 @@ app.use(express_1.default.json());
 app.use(body_parser_1.default.json());
 app.use('/api/notification', notificationRouter_1.notificationRouter);
 app.use('/api/', willRouter_1.willRouter);
+app.use('/api/', authRouter_1.authRouter);
 app.get('/', (req, res) => {
     res.send('Welcome to Crypto-Will');
 });

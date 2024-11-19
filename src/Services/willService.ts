@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const provider = new ethers.JsonRpcProvider('https://eth-sepolia.g.alchemy.com/v2/8S1e9DetSzeZZBotPKgFIXHhIazGnCAi');
+const provider = new ethers.JsonRpcProvider('https://rpc.sepolia-api.lisk.com/');
 const privateKey = process.env.WALLET; 
 
 const getContract = async () => {
