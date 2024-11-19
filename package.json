@@ -7,7 +7,8 @@
     "start": "node build/server.js",
     "dev": "concurrently \"npm run watch\" \"npm run start\"",
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -21,14 +22,25 @@
     "concurrently": "^9.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "ethers": "^6.13.4",
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
+    "moment-timezone": "^0.5.46",
     "mongoose": "^8.8.1",
     "nodemailer": "^6.9.16",
-    "nodemon": "^3.1.7",
-    "typescript": "^5.6.3"
+    "nodemon": "^3.1.7"
   },
   "devDependencies": {
-    "ts-node": "^10.9.2"
+    "@types/bcrypt": "^5.0.2",
+    "@types/cron": "^2.4.3",
+    "@types/date-fns": "^2.6.3",
+    "@types/jest": "^29.5.14",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
   }
 }
