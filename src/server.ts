@@ -35,12 +35,13 @@ mongoose.connect(mongodb, {
   console.error('Error connecting to MongoDB:', error.message);
 });
 
-const job = new CronJob('0 0 * * *', async () => {
-    console.log('Running cron job to send notifications at midnight');
-    await sendWillNotifications(); 
-  }, null, true, 'Africa/Lagos');  
-  
-  job.start();
+const job = new CronJob('*/5 * * * *', async () => {
+  console.log('Running cron job to send notifications every 5 minutes');
+  await sendWillNotifications(); 
+}, null, true, 'Africa/Lagos');
+
+job.start();
+
   
 
 app.use((err: any, req: Request, res: Response, next: Function) => {

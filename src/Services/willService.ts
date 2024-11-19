@@ -1,7 +1,46 @@
+// import { Request, Response } from 'express';
+// import Will from '../Models/willModel';
+
+// export const confirmWillActivity= async (req: Request, res: Response) => {
+//   const { userId } = req.params;
+//   const now = new Date();
+
+//   try {
+//     const will = await Will.findOne({ userId });
+
+//     if (!will) {
+//       return res.status(404).json({ message: 'Will not found for this user' });
+//     }
+
+//     will.lastConfirmed = now;
+
+//     await will.save();
+
+//     res.status(200).json({ message: 'Your activity has been confirmed.' });
+
+//   } catch (error) {
+//     console.error('Error confirming activity:', error);
+//     res.status(500).json({ message: 'An error occurred while confirming your activity.' });
+//   }
+// };
 import { Request, Response } from 'express';
 import Will from '../Models/willModel';
+import { ethers } from 'ethers';
+import { willContractAddress, willAbi } from '../Config/contractConfig';
+import { sendEmail } from '../Emails/email';
+import dotenv from 'dotenv';
 
-export const confirmWillActivity= async (req: Request, res: Response) => {
+dotenv.config();
+
+const provider = new ethers.JsonRpcProvider('https://eth-sepolia.g.alchemy.com/v2/8S1e9DetSzeZZBotPKgFIXHhIazGnCAi');
+const privateKey = '4f54728faf8ebeeed41edbf1c3bfeee5efee9284511e9b73d7d1e75c20df38c4'; 
+
+const getContract = async () => {
+  const wallet = new ethers.Wallet(privateKey, provider);
+  return new ethers.Contract(willContractAddress, willAbi, wallet);
+};
+
+export const confirmWillActivity = async (req: Request, res: Response) => {
   const { userId } = req.params;
   const now = new Date();
 
@@ -11,18 +50,27 @@ export const confirmWillActivity= async (req: Request, res: Response) => {
     if (!will) {
       return res.status(404).json({ message: 'Will not found for this user' });
     }
-
     will.lastConfirmed = now;
-
     await will.save();
 
-    res.status(200).json({ message: 'Your activity has been confirmed.' });
+    const contract = await getContract(); 
+    const willId = will.willId;
 
+ 
+    const gracePeriod = 30 * 24 * 60 * 60; 
+    const activityThreshold = 90 * 24 * 60 * 60; 
+
+    const tx = await contract.updateTimeframes(willId, gracePeriod, activityThreshold);
+    await tx.wait(); 
+
+    res.status(200).json({ message: 'Your activity has been confirmed and timeframes updated.' });
   } catch (error) {
     console.error('Error confirming activity:', error);
     res.status(500).json({ message: 'An error occurred while confirming your activity.' });
   }
 };
+
+//
 
 //This function is for getting an email response immediately, Testing Purposes!
 
