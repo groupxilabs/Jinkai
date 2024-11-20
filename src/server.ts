@@ -5,6 +5,7 @@ import { CronJob } from 'cron';
 import { ConnectOptions } from 'mongoose';
 import dotenv from 'dotenv';
 import { notificationRouter } from './Routers/notificationRouter';
+import {authRouter} from './Routers/authRouter'
 import bodyParser from 'body-parser';
 import { willRouter } from './Routers/willRouter';
 import { sendWillNotifications } from './Services/notificationService';
@@ -20,6 +21,7 @@ app.use(bodyParser.json());
 
 app.use('/api/notification', notificationRouter);
 app.use('/api/', willRouter);
+app.use('/api/', authRouter)
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to Crypto-Will');

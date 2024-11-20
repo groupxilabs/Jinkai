@@ -1,6 +1,4 @@
 "use strict";
-// import { Request, Response } from 'express';
-// import Will from '../Models/willModel';
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -9,10 +7,16 @@ exports.confirmWillActivity = void 0;
 const willModel_1 = __importDefault(require("../Models/willModel"));
 const ethers_1 = require("ethers");
 const contractConfig_1 = require("../Config/contractConfig");
-const provider = new ethers_1.ethers.JsonRpcProvider('https://eth-sepolia.g.alchemy.com/v2/8S1e9DetSzeZZBotPKgFIXHhIazGnCAi');
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const provider = new ethers_1.ethers.JsonRpcProvider('https://rpc.sepolia-api.lisk.com/');
+const privateKey = process.env.WALLET;
 const getContract = async () => {
-    const signer = await provider.getSigner();
-    return new ethers_1.ethers.Contract(contractConfig_1.willContractAddress, contractConfig_1.willAbi, signer);
+    if (!privateKey) {
+        throw new Error('Private key is not defined');
+    }
+    const wallet = new ethers_1.ethers.Wallet(privateKey, provider);
+    return new ethers_1.ethers.Contract(contractConfig_1.willContractAddress, contractConfig_1.willAbi, wallet);
 };
 const confirmWillActivity = async (req, res) => {
     const { userId } = req.params;
@@ -26,9 +30,11 @@ const confirmWillActivity = async (req, res) => {
         await will.save();
         const contract = await getContract();
         const willId = will.willId;
-        const tx = await contract.updateLastConfirmed(willId, now.getTime());
+        const gracePeriod = 30 * 24 * 60 * 60;
+        const activityThreshold = 90 * 24 * 60 * 60;
+        const tx = await contract.updateTimeframes(willId, gracePeriod, activityThreshold);
         await tx.wait();
-        res.status(200).json({ message: 'Your activity has been confirmed.' });
+        res.status(200).json({ message: 'Your activity has been confirmed and timeframes updated.' });
     }
     catch (error) {
         console.error('Error confirming activity:', error);
@@ -36,6 +42,7 @@ const confirmWillActivity = async (req, res) => {
     }
 };
 exports.confirmWillActivity = confirmWillActivity;
+//
 //This function is for getting an email response immediately, Testing Purposes!
 // import { Request, Response } from 'express';
 // import Will from '../Models/willModel';
