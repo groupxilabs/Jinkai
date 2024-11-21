@@ -1,14 +1,80 @@
+// import { Request, Response } from 'express';
+// import Will from '../Models/willModel';
+// import { ethers } from 'ethers';
+// import { willContractAddress, willAbi } from '../Config/contractConfig';
+// import dotenv from 'dotenv';
+
+// dotenv.config();
+
+// const provider = new ethers.JsonRpcProvider('https://rpc.sepolia-api.lisk.com/');
+// const privateKey = process.env.PRIVATE_KEY;
+
+// const getContract = async () => {
+//   if (!privateKey) {
+//     throw new Error('Private key is not defined');
+//   }
+//   const wallet = new ethers.Wallet(privateKey, provider);
+//   return new ethers.Contract(willContractAddress, willAbi, wallet);
+// };
+
+// export const confirmWillActivity = async (req: Request, res: Response) => {
+//   const { willId } = req.params; 
+//   const { walletAddress } = req.body; 
+//   const now = Math.floor(Date.now() / 1000); // Current time in seconds
+
+//   try {
+//     // Find will by wallet address in DB
+//     const will = await Will.findOne({ walletAddress });
+
+//     if (!will) {
+//       return res.status(404).json({ message: 'Will not found for this user' });
+//     }
+
+//     // Ensure that the willId matches the one stored in DB
+//     if (will.willId.toString() !== willId.toString()) {
+//       return res.status(404).json({ message: 'Will ID does not match' });
+//     }
+
+//     // Get contract instance
+//     const contract = await getContract();
+
+//     // Fetch on-chain will details by willId and wallet address
+//     const onChainWill = await contract.getWillDetailsByIdAndOwner(willId, walletAddress);
+//     console.log('onChainWill:', onChainWill);  // Debugging output
+
+//     if (!onChainWill) {
+//       return res.status(404).json({ message: 'Will not found on the blockchain for this wallet' });
+//     }
+
+//     // Define grace period and activity threshold (in seconds)
+//     const gracePeriod = 30 * 24 * 60 * 60; // 30 days in seconds
+//     const activityThreshold = 90 * 24 * 60 * 60; // 90 days in seconds
+
+//     // Update timeframes on the blockchain
+//     const tx = await contract.updateTimeframes(willId, gracePeriod, activityThreshold);
+//     await tx.wait(); // Wait for transaction confirmation
+
+//     // Update the last confirmed timestamp in the database
+//     will.lastConfirmed = new Date();
+//     await will.save();
+
+//     res.status(200).json({ message: 'Your activity has been confirmed and timeframes updated.' });
+//   } catch (error) {
+//     console.error('Error confirming activity:', error);
+//     res.status(500).json({ message: 'An error occurred while confirming your activity.' });
+//   }
+// };
+
+
 import { Request, Response } from 'express';
-import Will from '../Models/willModel';
 import { ethers } from 'ethers';
 import { willContractAddress, willAbi } from '../Config/contractConfig';
-import { sendEmail } from '../Emails/email';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const provider = new ethers.JsonRpcProvider('https://rpc.sepolia-api.lisk.com/');
-const privateKey = process.env.WALLET; 
+const privateKey = process.env.PRIVATE_KEY;
 
 const getContract = async () => {
   if (!privateKey) {
@@ -19,22 +85,23 @@ const getContract = async () => {
 };
 
 export const confirmWillActivity = async (req: Request, res: Response) => {
-  const { userId } = req.params;
-  const now = new Date();
+  const { willId } = req.params;  
+  const { walletAddress } = req.body;  
 
   try {
-    const will = await Will.findOne({ userId });
 
-    if (!will) {
-      return res.status(404).json({ message: 'Will not found for this user' });
+    const validWalletAddress = ethers.getAddress(walletAddress);
+    console.log('Valid Wallet Address:', validWalletAddress);  
+
+    const contract = await getContract();
+
+    const onChainWill = await contract.getWillDetailsByIdAndOwner(willId, validWalletAddress);
+    console.log('onChainWill:', onChainWill);  
+
+    if (!onChainWill || onChainWill === null) {
+      return res.status(404).json({ message: 'Will not found on the blockchain for this wallet' });
     }
-    will.lastConfirmed = now;
-    await will.save();
 
-    const contract = await getContract(); 
-    const willId = will.willId;
-
- 
     const gracePeriod = 30 * 24 * 60 * 60; 
     const activityThreshold = 90 * 24 * 60 * 60; 
 
@@ -47,6 +114,8 @@ export const confirmWillActivity = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'An error occurred while confirming your activity.' });
   }
 };
+
+
 
 //
 

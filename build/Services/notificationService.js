@@ -8,7 +8,7 @@ const email_1 = require("../Emails/email");
 const willModel_1 = __importDefault(require("../Models/willModel"));
 const ethers_1 = require("ethers");
 const contractConfig_1 = require("../Config/contractConfig");
-const provider = new ethers_1.ethers.JsonRpcProvider('https://eth-sepolia.g.alchemy.com/v2/8S1e9DetSzeZZBotPKgFIXHhIazGnCAi');
+const provider = new ethers_1.ethers.JsonRpcProvider('https://rpc.sepolia-api.lisk.com/');
 const contract = new ethers_1.ethers.Contract(contractConfig_1.willContractAddress, contractConfig_1.willAbi, provider);
 const sendReminderEmail = async (userId, email, subject) => {
     const reminderHtml = `

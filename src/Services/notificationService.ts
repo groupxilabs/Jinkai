@@ -3,7 +3,7 @@ import Will from '../Models/willModel';
 import { ethers } from 'ethers';
 import { willContractAddress, willAbi } from '../Config/contractConfig'; 
 
-const provider = new ethers.JsonRpcProvider('https://eth-sepolia.g.alchemy.com/v2/8S1e9DetSzeZZBotPKgFIXHhIazGnCAi');
+const provider = new ethers.JsonRpcProvider('https://rpc.sepolia-api.lisk.com/');
 const contract = new ethers.Contract(willContractAddress, willAbi, provider);
 
 const sendReminderEmail = async (userId: string, email: string, subject: string) => {
