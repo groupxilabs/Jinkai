@@ -1,9 +1,4 @@
 "use strict";
-// import { Request, Response } from 'express';
-// import Will from '../Models/willModel';
-// import { ethers } from 'ethers';
-// import { willContractAddress, willAbi } from '../Config/contractConfig';
-// import dotenv from 'dotenv';
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -38,7 +33,7 @@ const confirmWillActivity = async (req, res) => {
         const activityThreshold = 90 * 24 * 60 * 60;
         const tx = await contract.updateTimeframes(willId, gracePeriod, activityThreshold);
         await tx.wait();
-        res.status(200).json({ message: 'Your activity has been confirmed and timeframes updated.', onChainWill });
+        res.status(200).json({ message: 'Your activity has been confirmed and timeframes updated.', onChainWill: onChainWill.toString() });
     }
     catch (error) {
         console.error('Error confirming activity:', error);

@@ -1,11 +1,6 @@
 import { Request, Response } from 'express';
 import { authenticateUser } from '../Services/authService';
 
-/**
- * Verifies the user's signature and authenticates them.
- * @param req - Express request object.
- * @param res - Express response object.
- */
 export const verifyUser = async (req: Request, res: Response): Promise<void> => {
   const { walletAddress, signature } = req.body;
 
