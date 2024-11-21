@@ -23,27 +23,22 @@ const getContract = async () => {
     return new ethers_1.ethers.Contract(contractConfig_1.willContractAddress, contractConfig_1.willAbi, wallet);
 };
 const confirmWillActivity = async (req, res) => {
-    const { willId } = req.params; // Extract Will ID from URL params
-    const { walletAddress } = req.body; // Extract Wallet Address from request body
+    const { willId } = req.params;
+    const { walletAddress } = req.body;
     try {
-        // Convert wallet address to checksummed format (for consistency)
         const validWalletAddress = ethers_1.ethers.getAddress(walletAddress);
-        console.log('Valid Wallet Address:', validWalletAddress); // Log to confirm
-        // Initialize contract
+        console.log('Valid Wallet Address:', validWalletAddress);
         const contract = await getContract();
-        // Fetch the will details from the blockchain using the willId and walletAddress
         const onChainWill = await contract.getWillDetailsByIdAndOwner(willId, validWalletAddress);
-        console.log('onChainWill:', onChainWill); // Log the will details from the blockchain
+        console.log('onChainWill:', onChainWill);
         if (!onChainWill || onChainWill === null) {
             return res.status(404).json({ message: 'Will not found on the blockchain for this wallet' });
         }
-        // Define grace period and activity threshold (in seconds)
-        const gracePeriod = 30 * 24 * 60 * 60; // 30 days in seconds
-        const activityThreshold = 90 * 24 * 60 * 60; // 90 days in seconds
-        // Update timeframes on the blockchain
+        const gracePeriod = 30 * 24 * 60 * 60;
+        const activityThreshold = 90 * 24 * 60 * 60;
         const tx = await contract.updateTimeframes(willId, gracePeriod, activityThreshold);
-        await tx.wait(); // Wait for transaction confirmation
-        res.status(200).json({ message: 'Your activity has been confirmed and timeframes updated.' });
+        await tx.wait();
+        res.status(200).json({ message: 'Your activity has been confirmed and timeframes updated.', onChainWill });
     }
     catch (error) {
         console.error('Error confirming activity:', error);
@@ -51,52 +46,3 @@ const confirmWillActivity = async (req, res) => {
     }
 };
 exports.confirmWillActivity = confirmWillActivity;
-//
-//This function is for getting an email response immediately, Testing Purposes!
-// import { Request, Response } from 'express';
-// import Will from '../Models/willModel';
-// import { sendEmail } from '../Emails/email';
-// import userModel from '../Models/userModel';
-// export const confirmWillActivity = async (req: Request, res: Response) => {
-//   const { userId } = req.params;
-//   try {
-//     // Retrieve the user from the database
-//     const user = await userModel.findOne({ _id: userId });
-//     if (!user) {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
-//     // Retrieve the will associated with the user
-//     let will = await Will.findOne({ userId: userId });
-//     // If no Will is found, create a new Will for the user
-//     if (!will) {
-//       will = new Will({
-//         userId: user._id,
-//         email: user.Email, // Assuming `Email` is the field name in the user model
-//         status: 'active',
-//         creationDate: new Date(),
-//         lastConfirmed: new Date(), // Set to current date when created
-//       });
-//       await will.save();
-//       console.log('New will created for user');
-//     }
-//     // Send an email to the user's email address
-//     try {
-//       await sendEmail({
-//         email: user.Email,
-//         subject: '6-Month Reminder',
-//         html: `
-//           <p>Please confirm that you are still active on our platform by clicking the link below:</p>
-//           <a href="https://yourapp.com/will/confirm/${userId}">Confirm Activity</a>
-//         `,
-//       });
-//       console.log(`Email sent to ${user.Email}`);
-//       return res.status(200).json({ message: 'Email sent successfully for testing' });
-//     } catch (error) {
-//       console.error('Error sending email:', error);
-//       return res.status(500).json({ message: 'Error sending email' });
-//     }
-//   } catch (error) {
-//     console.error('Error processing email confirmation:', error);
-//     return res.status(500).json({ message: 'An error occurred while processing the request' });
-//   }
-// };
