@@ -1,5 +1,4 @@
 "use strict";
-// const mongoose = require("mongoose");
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -24,36 +23,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// const userSchema = new mongoose.Schema({
-// //   Fullname: {
-// //     type: String,
-// //     required: true,
-// //     trim: true 
-// //   },
-// //   Email: {
-// //     type: String,
-// //     required: true,
-// //     unique: true, 
-// //     trim: true,
-// //     lowercase: true, 
-// //     validate: {
-// //       validator: function(value: string) {
-// //         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-// //       },
-// //       message: (props: { value: any; }) => `${props.value} is not a valid email!`
-// //     }
-// //   },
-// //   Password: {
-// //     type: String,
-// //     required: true,
-// //     minlength: 6, 
-// //     trim: true
-// //   }
-// walletAddress: { type: String, required: true, unique: true },
-// authenticatedAt: { type: Date, required: true },
-// });
-// const userModel = mongoose.model("User", userSchema);
-// export default userModel;
 const mongoose_1 = __importStar(require("mongoose"));
 const UserSchema = new mongoose_1.Schema({
     walletAddress: { type: String, required: true, unique: true },

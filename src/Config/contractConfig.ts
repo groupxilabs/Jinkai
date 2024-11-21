@@ -1,4 +1,4 @@
-export const willContractAddress = '0x9515ac929D2103787381eca5c629dFa5362373E5';
+export const willContractAddress = '0x3E5c60451b7FFc11e6F7DDcD05b0478D5d11c1a0';
 
 export const willAbi = [
     {
@@ -28,16 +28,6 @@ export const willAbi = [
         "type": "error"
     },
     {
-        "inputs": [],
-        "name": "ActivityThresholdOutOfRange",
-        "type": "error"
-    },
-    {
-        "inputs": [],
-        "name": "ActivityThresholdTooShort",
-        "type": "error"
-    },
-    {
         "inputs": [
             {
                 "internalType": "uint256",
@@ -60,22 +50,22 @@ export const willAbi = [
     },
     {
         "inputs": [],
-        "name": "BeneficiaryAlreadyExists",
+        "name": "BeneficiaryExists",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "BeneficiaryDoesNotExist",
-        "type": "error"
-    },
-    {
-        "inputs": [],
-        "name": "DeadManSwitchAlreadyTriggered",
+        "name": "BeneficiaryMissing",
         "type": "error"
     },
     {
         "inputs": [],
         "name": "DeadManSwitchNotTriggered",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "DeadSwitchActive",
         "type": "error"
     },
     {
@@ -111,32 +101,22 @@ export const willAbi = [
     },
     {
         "inputs": [],
-        "name": "GracePeriodOutOfRange",
+        "name": "InvalidBeneficiary",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "InvalidBeneficiaryAddress",
+        "name": "InvalidToken",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "InvalidTokenType",
-        "type": "error"
-    },
-    {
-        "inputs": [],
-        "name": "NoAllocationsOrEtherProvided",
+        "name": "NoAllocation",
         "type": "error"
     },
     {
         "inputs": [],
         "name": "NotABeneficiary",
-        "type": "error"
-    },
-    {
-        "inputs": [],
-        "name": "NotAuthorizedBackend",
         "type": "error"
     },
     {
@@ -173,7 +153,7 @@ export const willAbi = [
     },
     {
         "inputs": [],
-        "name": "WillDoesNotExist",
+        "name": "Unauthorized",
         "type": "error"
     },
     {
@@ -194,7 +174,12 @@ export const willAbi = [
     },
     {
         "inputs": [],
-        "name": "WillNotActive",
+        "name": "WillInactive",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "WillNotFound",
         "type": "error"
     },
     {
@@ -815,6 +800,80 @@ export const willAbi = [
     {
         "inputs": [
             {
+                "internalType": "uint256",
+                "name": "willId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "getWillDetailsByIdAndOwner",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "willOwner",
+                "type": "address"
+            },
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "lastActivity",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "isActive",
+                "type": "bool"
+            },
+            {
+                "internalType": "uint256",
+                "name": "etherAllocation",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "gracePeriod",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "activityThreshold",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "deadManSwitchTriggered",
+                "type": "bool"
+            },
+            {
+                "internalType": "uint256",
+                "name": "deadManSwitchTimestamp",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address[]",
+                "name": "beneficiaries",
+                "type": "address[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "address",
                 "name": "beneficiary",
                 "type": "address"
@@ -904,19 +963,6 @@ export const willAbi = [
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "beneficiary",
-                "type": "address"
-            }
-        ],
-        "name": "removeBeneficiary",
-        "outputs": [],
-        "stateMutability": "nonpayable",
         "type": "function"
     },
     {

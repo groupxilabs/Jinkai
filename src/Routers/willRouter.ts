@@ -3,4 +3,4 @@ import { confirmActivity} from '../Controllers/willController';
 
 export const willRouter = express.Router();
 
-willRouter.post('/will/confirm/:userId', confirmActivity);
+willRouter.post('/will/confirm/:willId', confirmActivity);
