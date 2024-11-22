@@ -4,7 +4,7 @@ import { authenticateUser } from '../Services/authService';
 export const verifyUser = async (req: Request, res: Response): Promise<void> => {
   const { walletAddress, signature , message} = req.body;
 
-  if (!walletAddress || !signature ) {
+  if (!walletAddress || !signature || !message) {
     res.status(400).json({ message: 'Wallet address and signature are required' });
     return;
   }
