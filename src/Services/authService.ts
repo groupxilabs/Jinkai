@@ -1,13 +1,9 @@
 import { ethers } from 'ethers';
 import User, { IUser } from '../Models/authModel';
-
-// export const getSigningMessage = (walletAddress: string): string => {
-//   return `Please sign this message to authenticate with your wallet. Wallet Address: ${walletAddress}`;
-// };
+import { error } from 'console';
 
 export const verifySignature = (walletAddress: string, signature: string, message: string): boolean => {
   try {
-
     if (!/^0x([A-Fa-f0-9]{130})$/.test(signature)) {
       console.error('Invalid signature format:', signature);
       throw new Error('Invalid signature format');

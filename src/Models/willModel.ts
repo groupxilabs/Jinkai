@@ -13,7 +13,7 @@ interface IWill extends Document {
 const WillSchema = new Schema<IWill>({
   userId: { type: String, required: true },
   willId: { type: String, default: () => new Types.ObjectId().toString() }, 
-  email: { type: String, required: true },
+  email: { type: String, },
   creationDate: { type: Date, required: true },
   lastConfirmed: { type: Date, default: null },
   beneficiaries: { type: [String], required: true },
