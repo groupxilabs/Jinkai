@@ -2,15 +2,15 @@ import { Request, Response } from 'express';
 import { authenticateUser } from '../Services/authService';
 
 export const verifyUser = async (req: Request, res: Response): Promise<void> => {
-  const { walletAddress, signature } = req.body;
+  const { walletAddress, signature , message} = req.body;
 
-  if (!walletAddress || !signature) {
+  if (!walletAddress || !signature ) {
     res.status(400).json({ message: 'Wallet address and signature are required' });
     return;
   }
 
   try {
-    const user = await authenticateUser(walletAddress, signature);
+    const user = await authenticateUser(walletAddress, signature, message);
     res.status(200).json({ message: 'Authentication successful', user });
   } catch (error) {
     console.error('Error during authentication:', error as Error);
