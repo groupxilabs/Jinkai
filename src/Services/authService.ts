@@ -1,6 +1,10 @@
+import jwt from 'jsonwebtoken';
 import { ethers } from 'ethers';
 import User, { IUser } from '../Models/authModel';
-import { error } from 'console';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const SECRET_KEY = process.env.JWT_SECRET || 'CRYPTO_WILL';
 
 export const verifySignature = (walletAddress: string, signature: string, message: string): boolean => {
   try {
@@ -10,7 +14,6 @@ export const verifySignature = (walletAddress: string, signature: string, messag
     }
 
     const recoveredAddress = ethers.verifyMessage(message, signature);
-
     return recoveredAddress.toLowerCase() === walletAddress.toLowerCase();
   } catch (error) {
     console.error('Error verifying signature:', error);
@@ -18,7 +21,11 @@ export const verifySignature = (walletAddress: string, signature: string, messag
   }
 };
 
-export const authenticateUser = async (walletAddress: string, signature: string, message: string): Promise<IUser> => {
+export const authenticateUser = async (
+  walletAddress: string,
+  signature: string,
+  message: string
+): Promise<{ user: IUser; token: string }> => {
   try {
     console.log('Authenticating user...');
     console.log('Received wallet address:', walletAddress);
@@ -38,8 +45,15 @@ export const authenticateUser = async (walletAddress: string, signature: string,
       await user.save();
     }
 
+
+    const token = jwt.sign(
+      { walletAddress: user.walletAddress, userId: user._id },
+      SECRET_KEY,
+      { expiresIn: '1h' } 
+    );
+
     console.log('User authenticated successfully:', user);
-    return user;
+    return { user, token };
   } catch (error) {
     console.error('Error during authentication:', error);
     throw new Error('Authentication failed');
