@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const walletPrivateKey =  process.env.PRIVATE_KEY;; 
-const walletAddress = '0x9e2d3c52471A23500bA1aB086fe2812f1d444EA4'; 
+const walletAddress = '0x9e2d3c52471A23500bA1aB086fe2812f1d444EA2'; 
 
 const generateSignature = async () => {
   try {
