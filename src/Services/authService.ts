@@ -59,3 +59,31 @@ export const authenticateUser = async (
     throw new Error('Authentication failed');
   }
 };
+
+export const getUserById = async (userId: string): Promise<IUser | null> => {
+  try {
+    console.log(`Fetching user with ID: ${userId}`);
+    const user = await User.findById(userId);
+    if (!user) {
+      console.log(`No user found with ID: ${userId}`);
+      return null;
+    }
+    console.log('User retrieved successfully:', user);
+    return user;
+  } catch (error) {
+    console.error('Error fetching user by ID:', error);
+    throw new Error('Failed to fetch user by ID');
+  }
+};
+
+export const getAllUsers = async (): Promise<IUser[]> => {
+  try {
+    console.log('Fetching all users...');
+    const users = await User.find();
+    console.log('Users retrieved successfully:', users);
+    return users;
+  } catch (error) {
+    console.error('Error fetching all users:', error);
+    throw new Error('Failed to fetch all users');
+  }
+};
