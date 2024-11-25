@@ -47,12 +47,10 @@ export const sendWillNotifications = async () => {
         }
       }
 
-      // If no response after a year, mark the will as distributed
       if (diffInMonths >= 12 && !lastConfirmed) {
         will.status = 'distributed';
         await will.save();
 
-        // Smart contract will distribute will to beneficiaries after one year of inactivity
         const tx = await contract.distributeWill(willId);  
         await tx.wait();
       }
