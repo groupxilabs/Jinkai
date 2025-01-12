@@ -1,4 +1,97 @@
-export const willContractAddress = '0x3E5c60451b7FFc11e6F7DDcD05b0478D5d11c1a0';
+export const willContractAddress = '0x810C94bD7DC8aF98f6F142C6aaca13824b51Ac42';
+export const importedWillAddress = '0x1E813f6C7e443840FB1f4bdb7BE0Cf0408234cd5';
+
+export const importedAbi = [
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_willRegistryAddress",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "inputs": [],
+        "name": "Unauthorized",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "WillIdInvalid",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "WillIdNotFound",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "willId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "getActivityThreshold",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "willId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "getGracePeriod",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "willRegistry",
+        "outputs": [
+            {
+                "internalType": "contract IWillRegistry",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
+
+
 
 export const willAbi = [
     {
@@ -543,7 +636,7 @@ export const willAbi = [
         ],
         "name": "addBeneficiaryWithAllocation",
         "outputs": [],
-        "stateMutability": "payable",
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -591,6 +684,11 @@ export const willAbi = [
     },
     {
         "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "willId",
+                "type": "uint256"
+            },
             {
                 "internalType": "address",
                 "name": "willOwner",
@@ -673,25 +771,6 @@ export const willAbi = [
     {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "willId",
-                "type": "uint256"
-            }
-        ],
-        "name": "getActivityThreshold",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "address",
                 "name": "owner",
                 "type": "address"
@@ -767,7 +846,7 @@ export const willAbi = [
                 "type": "uint256"
             }
         ],
-        "name": "getRemainingGracePeriod",
+        "name": "getTimeUntilDeadManSwitch",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -781,12 +860,50 @@ export const willAbi = [
     {
         "inputs": [
             {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "getTotalTokensWilled",
+        "outputs": [
+            {
                 "internalType": "uint256",
-                "name": "willId",
+                "name": "",
                 "type": "uint256"
             }
         ],
-        "name": "getTimeUntilDeadManSwitch",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "getTotalUniqueBeneficiaries",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "getTotalWillsCreated",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -875,16 +992,58 @@ export const willAbi = [
         "inputs": [
             {
                 "internalType": "address",
-                "name": "beneficiary",
+                "name": "owner",
                 "type": "address"
             }
         ],
-        "name": "getWillsAsBeneficiary",
+        "name": "getWillsByOwner",
         "outputs": [
             {
-                "internalType": "address[]",
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "willId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "willName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "tokenAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint8",
+                        "name": "tokenType",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "totalAmount",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "beneficiaryCount",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "activityPeriod",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "gracePeriod",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct WillRegistry.WillDetails[]",
                 "name": "",
-                "type": "address[]"
+                "type": "tuple[]"
             }
         ],
         "stateMutability": "view",
@@ -894,16 +1053,53 @@ export const willAbi = [
         "inputs": [
             {
                 "internalType": "address",
-                "name": "owner",
+                "name": "beneficiary",
                 "type": "address"
             }
         ],
-        "name": "getWillsByOwner",
+        "name": "getWillsWilledToBeneficiary",
         "outputs": [
             {
-                "internalType": "uint256[]",
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "willId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "willName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "tokenAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "enum WillRegistry.TokenType",
+                        "name": "tokenType",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "amount",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "claimed",
+                        "type": "bool"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "willOwner",
+                        "type": "address"
+                    }
+                ],
+                "internalType": "struct WillRegistry.BeneficiaryWillInfo[]",
                 "name": "",
-                "type": "uint256[]"
+                "type": "tuple[]"
             }
         ],
         "stateMutability": "view",

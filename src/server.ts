@@ -10,6 +10,7 @@ import bodyParser from 'body-parser';
 import { willRouter } from './Routers/willRouter';
 import { sendWillNotifications } from './Services/notificationService';
 
+
 dotenv.config();
 
 const app = express();
@@ -37,12 +38,12 @@ mongoose.connect(mongodb, {
   console.error('Error connecting to MongoDB:', error.message);
 });
 
-const job = new CronJob('*/5 * * * *', async () => {
-  console.log('Running cron job to send notifications every 5 minutes');
-  await sendWillNotifications(); 
-}, null, true, 'Africa/Lagos');
+// const job = new CronJob('*/5 * * * * *', async () => {
+//   console.log('Running cron job to send notifications ');
+//   await sendWillNotifications(); 
+// }, null, true, 'Africa/Lagos');
 
-job.start();
+// job.start();
 
   
 
